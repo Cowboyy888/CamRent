@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/*
+ * CamRent design tokens ("Verified calm", blueprint section 5).
+ * Colours are exposed as Tailwind utilities, e.g. bg-ink, text-mekong-700,
+ * border-sand-200. Text/background pairs used in components meet WCAG AA.
+ */
+@theme {
+  --color-ink: #0b1f2a;
+  --color-ink-soft: #1b3442;
+
+  --color-mekong-50: #e8f3f5;
+  --color-mekong-100: #d3e8ec;
+  --color-mekong-300: #7fc4cf;
+  --color-mekong-500: #1f7f91;
+  --color-mekong-700: #0e5e6f;
+  --color-mekong-800: #0b4b59;
+
+  --color-laterite-50: #f7eae3;
+  --color-laterite-600: #b8562e;
+  --color-laterite-700: #9a4524;
+
+  --color-sand-50: #faf7f2;
+  --color-sand-100: #f4efe7;
+  --color-sand-200: #ede6da;
+  --color-sand-300: #ddd3c3;
+
+  --color-muted: #5b6670;
+
+  --color-success: #1e7a4c;
+  --color-success-50: #e6f2ec;
+  --color-warning: #8a5a12;
+  --color-warning-50: #fbf1e0;
+  --color-danger: #b42318;
+  --color-danger-50: #fbe9e7;
+  --color-info: #2f5da8;
+  --color-info-50: #e8eef8;
+
+  --radius-control: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-panel: 1rem;
+
+  --shadow-card: 0 8px 24px rgb(11 31 42 / 0.08);
+  --shadow-panel: 0 18px 50px rgb(11 31 42 / 0.16);
+}
+
+/*
+ * Font stacks are switched per language through CSS variables, so a Khmer
+ * page uses Kantumruy Pro for Khmer script and a Chinese page uses the
+ * system's Simplified Chinese font (no multi-megabyte CJK web font).
+ */
+:root {
+  --cr-cjk: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC",
+    "Noto Sans SC", "Source Han Sans SC";
+  --cr-font-body: var(--font-inter), var(--cr-cjk), ui-sans-serif, system-ui, sans-serif;
+  --cr-font-display: var(--font-jakarta), var(--font-inter), var(--cr-cjk), ui-sans-serif,
+    system-ui, sans-serif;
+  color-scheme: light;
+}
+
+:lang(km) {
+  --cr-font-body: var(--font-inter), var(--font-kantumruy), "Khmer OS", "Noto Sans Khmer",
+    ui-sans-serif, system-ui, sans-serif;
+  --cr-font-display: var(--font-jakarta), var(--font-kantumruy), "Khmer OS",
+    "Noto Sans Khmer", ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme inline {
+  --font-sans: var(--cr-font-body);
+  --font-display: var(--cr-font-display);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-sand-50 font-sans text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-mekong-500);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/*
+ * Khmer has stacked vowels and subscript consonants. These rules are
+ * intentionally unlayered so they win over tight leading utilities and
+ * prevent glyphs from overlapping between lines.
+ */
+:lang(km) body {
+  line-height: 1.8;
+}
+
+:lang(km) :is(h1, h2, h3, h4, .leading-tight, .leading-snug) {
+  line-height: 1.5;
+}
+
+/* Letter-spacing splits Khmer character clusters apart; tracking utilities
+   are for Latin small caps only. */
+:lang(km) [class*="tracking-"] {
+  letter-spacing: normal;
+}

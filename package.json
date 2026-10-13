@@ -1,0 +1,46 @@
+{
+  "name": "camrent-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:rls": "RLS_TEST_LOCAL=1 vitest run tests/rls",
+    "db:reset": "supabase db reset",
+    "db:types": "supabase gen types typescript --local --schema public > src/types/database.ts",
+    "check": "npm run lint && npm run typecheck && npm run test"
+  },
+  "dependencies": {
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.117.3",
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "server-only": "0.0.1",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "^4",
+    "@types/node": "^20",
+    "@types/pg": "8.15.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.0",
+    "pg": "8.16.3",
+    "supabase": "2.120.0",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "4.1.11"
+  },
+  "description": "CamRent: property rental agency website and CRM (Phnom Penh, Cambodia)",
+  "engines": {
+    "node": ">=20.9.0",
+    "npm": ">=11.0.0"
+  }
+}
