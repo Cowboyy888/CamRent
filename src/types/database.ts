@@ -85,6 +85,84 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"automation_events": {
+                  Row: {
+                    "attempts": number,"created_at": string,"error_summary": string | null,"id": string,"idempotency_key": string,"outcome": string | null,"rule_code": string,"run_id": string | null,"status": string,"subject_id": string,"subject_type": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "attempts"?: number,"created_at"?: string,"error_summary"?: string | null,"id"?: string,"idempotency_key": string,"outcome"?: string | null,"rule_code": string,"run_id"?: string | null,"status": string,"subject_id": string,"subject_type": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "attempts"?: number,"created_at"?: string,"error_summary"?: string | null,"id"?: string,"idempotency_key"?: string,"outcome"?: string | null,"rule_code"?: string,"run_id"?: string | null,"status"?: string,"subject_id"?: string,"subject_type"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "automation_events_rule_code_fkey"
+      columns: ["rule_code"]
+isOneToOne: false
+      referencedRelation: "automation_rules"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "automation_events_run_id_fkey"
+      columns: ["run_id"]
+isOneToOne: false
+      referencedRelation: "automation_runs"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"automation_rules": {
+                  Row: {
+                    "code": string,"config": NonNullable<Json>,"enabled": boolean,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "code": string,"config"?: NonNullable<Json>,"enabled"?: boolean,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "code"?: string,"config"?: NonNullable<Json>,"enabled"?: boolean,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "automation_rules_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "automation_rules_updated_by_fkey"
+      columns: ["updated_by"]
+isOneToOne: false
+      referencedRelation: "staff_names"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"automation_runs": {
+                  Row: {
+                    "finished_at": string | null,"id": string,"started_at": string,"started_by": string | null,"status": string,"summary": NonNullable<Json>,"trigger": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "finished_at"?: string | null,"id"?: string,"started_at"?: string,"started_by"?: string | null,"status"?: string,"summary"?: NonNullable<Json>,"trigger": string
+                  }
+                  Update: {
+                    "finished_at"?: string | null,"id"?: string,"started_at"?: string,"started_by"?: string | null,"status"?: string,"summary"?: NonNullable<Json>,"trigger"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "automation_runs_started_by_fkey"
+      columns: ["started_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "automation_runs_started_by_fkey"
+      columns: ["started_by"]
+isOneToOne: false
+      referencedRelation: "staff_names"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"commission_transactions": {
                   Row: {
                     "amount_minor": number,"commission_id": string,"created_at": string,"currency": Database["public"]['Enums']["currency_code"],"entry_type": Database["public"]['Enums']["ledger_entry_type"],"id": string,"notes": string | null,"occurred_on": string,"payment_method": Database["public"]['Enums']["payment_method"] | null,"reason": string | null,"recorded_by": string,"reference": string | null,"reverses_id": string | null
@@ -205,6 +283,20 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"document_counters": {
+                  Row: {
+                    "doc_type": Database["public"]['Enums']["document_type"],"last_value": number,"year": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "doc_type": Database["public"]['Enums']["document_type"],"last_value"?: number,"year": number
+                  }
+                  Update: {
+                    "doc_type"?: Database["public"]['Enums']["document_type"],"last_value"?: number,"year"?: number
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"expenses": {
                   Row: {
                     "amount_minor": number,"approved_at": string | null,"approved_by": string | null,"category": Database["public"]['Enums']["expense_category"],"created_at": string,"created_by": string,"currency": Database["public"]['Enums']["currency_code"],"description": string,"expense_date": string,"id": string,"paid_on": string | null,"payment_method": Database["public"]['Enums']["payment_method"] | null,"receipt_path": string | null,"rejection_reason": string | null,"status": Database["public"]['Enums']["expense_status"],"updated_at": string,"vendor": string | null
@@ -290,6 +382,46 @@ isOneToOne: false
     },{
       foreignKeyName: "financial_audit_log_actor_id_fkey"
       columns: ["actor_id"]
+isOneToOne: false
+      referencedRelation: "staff_names"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"form_attempts": {
+                  Row: {
+                    "client_hash": string,"created_at": string,"id": number,"kind": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "client_hash": string,"created_at"?: string,"id"?: never,"kind": string
+                  }
+                  Update: {
+                    "client_hash"?: string,"created_at"?: string,"id"?: never,"kind"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"generated_documents": {
+                  Row: {
+                    "created_at": string,"doc_type": Database["public"]['Enums']["document_type"],"entity_id": string,"file_name": string | null,"generated_by": string,"id": string,"locale": Database["public"]['Enums']["locale_code"],"reference": string,"storage_path": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"doc_type": Database["public"]['Enums']["document_type"],"entity_id": string,"file_name"?: string | null,"generated_by": string,"id"?: string,"locale": Database["public"]['Enums']["locale_code"],"reference": string,"storage_path"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"doc_type"?: Database["public"]['Enums']["document_type"],"entity_id"?: string,"file_name"?: string | null,"generated_by"?: string,"id"?: string,"locale"?: Database["public"]['Enums']["locale_code"],"reference"?: string,"storage_path"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "generated_documents_generated_by_fkey"
+      columns: ["generated_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "generated_documents_generated_by_fkey"
+      columns: ["generated_by"]
 isOneToOne: false
       referencedRelation: "staff_names"
       referencedColumns: ["id"]
@@ -411,14 +543,14 @@ isOneToOne: false
                   ]
                 },"leads": {
                   Row: {
-                    "assigned_agent_id": string | null,"bedrooms_wanted": number | null,"budget_max_minor": number | null,"budget_min_minor": number | null,"campaign": string | null,"created_at": string,"currency": Database["public"]['Enums']["currency_code"],"customer_name": string,"desired_move_in": string | null,"email": string | null,"enquiry_message": string | null,"id": string,"lost_reason": string | null,"next_follow_up_at": string | null,"phone": string | null,"preferred_area": string | null,"preferred_language": Database["public"]['Enums']["locale_code"],"property_category": Database["public"]['Enums']["property_category"] | null,"property_id": string | null,"rental_period_months": number | null,"requirements_notes": string | null,"source": Database["public"]['Enums']["lead_source"],"stage": Database["public"]['Enums']["lead_stage"],"updated_at": string
+                    "assigned_agent_id": string | null,"bedrooms_wanted": number | null,"budget_max_minor": number | null,"budget_min_minor": number | null,"campaign": string | null,"created_at": string,"currency": Database["public"]['Enums']["currency_code"],"customer_name": string,"desired_move_in": string | null,"email": string | null,"enquiry_message": string | null,"id": string,"lost_reason": string | null,"next_follow_up_at": string | null,"phone": string | null,"preferred_area": string | null,"preferred_language": Database["public"]['Enums']["locale_code"],"property_category": Database["public"]['Enums']["property_category"] | null,"property_id": string | null,"rental_period_months": number | null,"requirements_notes": string | null,"sla_breached_at": string | null,"source": Database["public"]['Enums']["lead_source"],"stage": Database["public"]['Enums']["lead_stage"],"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "assigned_agent_id"?: string | null,"bedrooms_wanted"?: number | null,"budget_max_minor"?: number | null,"budget_min_minor"?: number | null,"campaign"?: string | null,"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"],"customer_name": string,"desired_move_in"?: string | null,"email"?: string | null,"enquiry_message"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_follow_up_at"?: string | null,"phone"?: string | null,"preferred_area"?: string | null,"preferred_language"?: Database["public"]['Enums']["locale_code"],"property_category"?: Database["public"]['Enums']["property_category"] | null,"property_id"?: string | null,"rental_period_months"?: number | null,"requirements_notes"?: string | null,"source"?: Database["public"]['Enums']["lead_source"],"stage"?: Database["public"]['Enums']["lead_stage"],"updated_at"?: string
+                    "assigned_agent_id"?: string | null,"bedrooms_wanted"?: number | null,"budget_max_minor"?: number | null,"budget_min_minor"?: number | null,"campaign"?: string | null,"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"],"customer_name": string,"desired_move_in"?: string | null,"email"?: string | null,"enquiry_message"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_follow_up_at"?: string | null,"phone"?: string | null,"preferred_area"?: string | null,"preferred_language"?: Database["public"]['Enums']["locale_code"],"property_category"?: Database["public"]['Enums']["property_category"] | null,"property_id"?: string | null,"rental_period_months"?: number | null,"requirements_notes"?: string | null,"sla_breached_at"?: string | null,"source"?: Database["public"]['Enums']["lead_source"],"stage"?: Database["public"]['Enums']["lead_stage"],"updated_at"?: string
                   }
                   Update: {
-                    "assigned_agent_id"?: string | null,"bedrooms_wanted"?: number | null,"budget_max_minor"?: number | null,"budget_min_minor"?: number | null,"campaign"?: string | null,"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"],"customer_name"?: string,"desired_move_in"?: string | null,"email"?: string | null,"enquiry_message"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_follow_up_at"?: string | null,"phone"?: string | null,"preferred_area"?: string | null,"preferred_language"?: Database["public"]['Enums']["locale_code"],"property_category"?: Database["public"]['Enums']["property_category"] | null,"property_id"?: string | null,"rental_period_months"?: number | null,"requirements_notes"?: string | null,"source"?: Database["public"]['Enums']["lead_source"],"stage"?: Database["public"]['Enums']["lead_stage"],"updated_at"?: string
+                    "assigned_agent_id"?: string | null,"bedrooms_wanted"?: number | null,"budget_max_minor"?: number | null,"budget_min_minor"?: number | null,"campaign"?: string | null,"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"],"customer_name"?: string,"desired_move_in"?: string | null,"email"?: string | null,"enquiry_message"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_follow_up_at"?: string | null,"phone"?: string | null,"preferred_area"?: string | null,"preferred_language"?: Database["public"]['Enums']["locale_code"],"property_category"?: Database["public"]['Enums']["property_category"] | null,"property_id"?: string | null,"rental_period_months"?: number | null,"requirements_notes"?: string | null,"sla_breached_at"?: string | null,"source"?: Database["public"]['Enums']["lead_source"],"stage"?: Database["public"]['Enums']["lead_stage"],"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -444,6 +576,58 @@ isOneToOne: false
       columns: ["property_id"]
 isOneToOne: false
       referencedRelation: "public_properties"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"notification_preferences": {
+                  Row: {
+                    "enabled": boolean,"type": Database["public"]['Enums']["notification_type"],"updated_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "enabled"?: boolean,"type": Database["public"]['Enums']["notification_type"],"updated_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "enabled"?: boolean,"type"?: Database["public"]['Enums']["notification_type"],"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "notification_preferences_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "notification_preferences_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "staff_names"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"notifications": {
+                  Row: {
+                    "created_at": string,"dedupe_key": string,"entity_id": string,"entity_type": string,"id": string,"read_at": string | null,"recipient_id": string,"type": Database["public"]['Enums']["notification_type"]
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"dedupe_key": string,"entity_id": string,"entity_type": string,"id"?: string,"read_at"?: string | null,"recipient_id": string,"type": Database["public"]['Enums']["notification_type"]
+                  }
+                  Update: {
+                    "created_at"?: string,"dedupe_key"?: string,"entity_id"?: string,"entity_type"?: string,"id"?: string,"read_at"?: string | null,"recipient_id"?: string,"type"?: Database["public"]['Enums']["notification_type"]
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "notifications_recipient_id_fkey"
+      columns: ["recipient_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "notifications_recipient_id_fkey"
+      columns: ["recipient_id"]
+isOneToOne: false
+      referencedRelation: "staff_names"
       referencedColumns: ["id"]
     }
                   ]
@@ -641,14 +825,14 @@ isOneToOne: false
                   ]
                 },"tasks": {
                   Row: {
-                    "assigned_to": string | null,"created_at": string,"created_by": string,"description": string | null,"due_at": string | null,"id": string,"lead_id": string | null,"priority": Database["public"]['Enums']["task_priority"],"property_id": string | null,"status": Database["public"]['Enums']["task_status"],"title": string,"updated_at": string
+                    "assigned_to": string | null,"automation_key": string | null,"completed_at": string | null,"created_at": string,"created_by": string | null,"deal_id": string | null,"description": string | null,"due_at": string | null,"id": string,"lead_id": string | null,"priority": Database["public"]['Enums']["task_priority"],"property_id": string | null,"source": string | null,"status": Database["public"]['Enums']["task_status"],"title": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "assigned_to"?: string | null,"created_at"?: string,"created_by": string,"description"?: string | null,"due_at"?: string | null,"id"?: string,"lead_id"?: string | null,"priority"?: Database["public"]['Enums']["task_priority"],"property_id"?: string | null,"status"?: Database["public"]['Enums']["task_status"],"title": string,"updated_at"?: string
+                    "assigned_to"?: string | null,"automation_key"?: string | null,"completed_at"?: string | null,"created_at"?: string,"created_by"?: string | null,"deal_id"?: string | null,"description"?: string | null,"due_at"?: string | null,"id"?: string,"lead_id"?: string | null,"priority"?: Database["public"]['Enums']["task_priority"],"property_id"?: string | null,"source"?: string | null,"status"?: Database["public"]['Enums']["task_status"],"title": string,"updated_at"?: string
                   }
                   Update: {
-                    "assigned_to"?: string | null,"created_at"?: string,"created_by"?: string,"description"?: string | null,"due_at"?: string | null,"id"?: string,"lead_id"?: string | null,"priority"?: Database["public"]['Enums']["task_priority"],"property_id"?: string | null,"status"?: Database["public"]['Enums']["task_status"],"title"?: string,"updated_at"?: string
+                    "assigned_to"?: string | null,"automation_key"?: string | null,"completed_at"?: string | null,"created_at"?: string,"created_by"?: string | null,"deal_id"?: string | null,"description"?: string | null,"due_at"?: string | null,"id"?: string,"lead_id"?: string | null,"priority"?: Database["public"]['Enums']["task_priority"],"property_id"?: string | null,"source"?: string | null,"status"?: Database["public"]['Enums']["task_status"],"title"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -674,6 +858,24 @@ isOneToOne: false
       columns: ["created_by"]
 isOneToOne: false
       referencedRelation: "staff_names"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "tasks_deal_id_fkey"
+      columns: ["deal_id"]
+isOneToOne: false
+      referencedRelation: "deal_financials"
+      referencedColumns: ["deal_id"]
+    },{
+      foreignKeyName: "tasks_deal_id_fkey"
+      columns: ["deal_id"]
+isOneToOne: false
+      referencedRelation: "deal_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "tasks_deal_id_fkey"
+      columns: ["deal_id"]
+isOneToOne: false
+      referencedRelation: "rental_deals"
       referencedColumns: ["id"]
     },{
       foreignKeyName: "tasks_lead_id_fkey"
@@ -806,7 +1008,7 @@ isOneToOne: false
                   ]
                 },"crm_lead_list": {
                   Row: {
-                    "agent_name": string | null,"assigned_agent_id": string | null,"created_at": string | null,"customer_name": string | null,"email": string | null,"id": string | null,"next_follow_up_at": string | null,"phone": string | null,"preferred_area": string | null,"preferred_language": Database["public"]['Enums']["locale_code"] | null,"property_category": Database["public"]['Enums']["property_category"] | null,"property_district": string | null,"property_id": string | null,"property_reference": string | null,"property_type": Database["public"]['Enums']["property_type"] | null,"source": Database["public"]['Enums']["lead_source"] | null,"stage": Database["public"]['Enums']["lead_stage"] | null,"updated_at": string | null
+                    "agent_name": string | null,"assigned_agent_id": string | null,"created_at": string | null,"customer_name": string | null,"email": string | null,"id": string | null,"next_follow_up_at": string | null,"phone": string | null,"preferred_area": string | null,"preferred_language": Database["public"]['Enums']["locale_code"] | null,"property_category": Database["public"]['Enums']["property_category"] | null,"property_district": string | null,"property_id": string | null,"property_reference": string | null,"property_type": Database["public"]['Enums']["property_type"] | null,"sla_breached_at": string | null,"source": Database["public"]['Enums']["lead_source"] | null,"stage": Database["public"]['Enums']["lead_stage"] | null,"updated_at": string | null
                   }
                   ComputedFields: never
                   Relationships: [
@@ -991,12 +1193,21 @@ isOneToOne: false
 "log_financial_export":
 { Args: { "details"?: Json,"report": string }; Returns: undefined
                            },
+"retry_automation_event":
+{ Args: { "event": string }; Returns: string
+                           },
+"run_automation_now":
+{ Args: Record<PropertyKey, never>; Returns: string
+                           },
+"run_automation_scheduled":
+{ Args: Record<PropertyKey, never>; Returns: string
+                           },
 "set_staff_role":
 { Args: { "make_active"?: boolean,"new_role": Database["public"]['Enums']["staff_role"],"target_user": string }; Returns: undefined
                            }
           }
           Enums: {
-            "activity_type": "note"|"call"|"message"|"email"|"meeting"|"stage_change"|"assignment"|"viewing","agent_share_method": "none"|"percent_of_commission"|"fixed_amount","area_unit": "sqm"|"sqft","authorization_status": "pending"|"active"|"expired"|"revoked","availability_status": "available"|"available_from"|"reserved"|"rented"|"off_market","commission_calculation": "percentage_of_rent"|"months_of_rent"|"fixed_amount","commission_earned_rule": "on_closed_won"|"on_collection","commission_method": "fixed_amount"|"percent_of_monthly_rent"|"percent_of_total_rent"|"custom_amount","commission_payment_status": "pending"|"partial"|"paid"|"overdue"|"waived","currency_code": "USD"|"KHR","deal_stage": "negotiation"|"reserved"|"lease_signed"|"commission_invoiced"|"commission_collected"|"lost"|"agreement_pending"|"closed_won"|"closed_lost"|"cancelled"|"lease_expired","document_kind": "agreement"|"receipt"|"other","expense_category": "advertising"|"transportation"|"office_rent"|"staff_costs"|"marketing_materials"|"utilities"|"other","expense_status": "pending"|"approved"|"rejected","fee_payer": "landlord"|"tenant"|"other","furnishing_status": "unfurnished"|"partially_furnished"|"fully_furnished","lead_source": "website_form"|"phone"|"walk_in"|"referral"|"social_media"|"partner_agent"|"other","lead_stage": "new"|"contacted"|"qualified"|"viewing_scheduled"|"viewed"|"negotiation"|"won"|"lost"|"reserved"|"unresponsive"|"on_hold"|"cancelled","ledger_entry_type": "payment"|"reversal"|"write_off"|"adjustment_up"|"adjustment_down","locale_code": "en"|"km"|"zh","media_type": "image"|"video"|"floor_plan","payment_method": "cash"|"bank_transfer"|"aba"|"wing"|"other","payout_eligibility_rule": "on_collected"|"on_earned","payout_status": "pending_approval"|"approved"|"paid"|"rejected"|"cancelled"|"reversed","property_category": "residential"|"commercial","property_type": "apartment"|"condo"|"serviced_apartment"|"villa"|"house"|"flat"|"office"|"retail_shop"|"shophouse"|"warehouse"|"commercial_space","publication_status": "draft"|"submitted"|"in_review"|"changes_requested"|"published"|"unpublished"|"archived","staff_role": "super_admin"|"manager"|"agent"|"marketing"|"finance","submission_status": "new"|"contacted"|"accepted"|"declined"|"spam","submitter_relationship": "owner"|"authorized_representative"|"developer"|"other_agent"|"other","task_priority": "low"|"normal"|"high"|"urgent","task_status": "todo"|"in_progress"|"done"|"cancelled","verification_status": "unverified"|"pending"|"verified"|"rejected","viewing_outcome": "interested"|"not_interested"|"needs_follow_up"|"wants_another_viewing","viewing_status": "scheduled"|"confirmed"|"completed"|"cancelled"|"no_show"
+            "activity_type": "note"|"call"|"message"|"email"|"meeting"|"stage_change"|"assignment"|"viewing","agent_share_method": "none"|"percent_of_commission"|"fixed_amount","area_unit": "sqm"|"sqft","authorization_status": "pending"|"active"|"expired"|"revoked","availability_status": "available"|"available_from"|"reserved"|"rented"|"off_market","commission_calculation": "percentage_of_rent"|"months_of_rent"|"fixed_amount","commission_earned_rule": "on_closed_won"|"on_collection","commission_method": "fixed_amount"|"percent_of_monthly_rent"|"percent_of_total_rent"|"custom_amount","commission_payment_status": "pending"|"partial"|"paid"|"overdue"|"waived","currency_code": "USD"|"KHR","deal_stage": "negotiation"|"reserved"|"lease_signed"|"commission_invoiced"|"commission_collected"|"lost"|"agreement_pending"|"closed_won"|"closed_lost"|"cancelled"|"lease_expired","document_kind": "agreement"|"receipt"|"other","document_type": "listing_sheet"|"inquiry_summary"|"viewing_confirmation"|"deal_summary"|"commission_statement"|"payout_statement"|"landlord_submission"|"agreement_draft","expense_category": "advertising"|"transportation"|"office_rent"|"staff_costs"|"marketing_materials"|"utilities"|"other","expense_status": "pending"|"approved"|"rejected","fee_payer": "landlord"|"tenant"|"other","furnishing_status": "unfurnished"|"partially_furnished"|"fully_furnished","lead_source": "website_form"|"phone"|"walk_in"|"referral"|"social_media"|"partner_agent"|"other","lead_stage": "new"|"contacted"|"qualified"|"viewing_scheduled"|"viewed"|"negotiation"|"won"|"lost"|"reserved"|"unresponsive"|"on_hold"|"cancelled","ledger_entry_type": "payment"|"reversal"|"write_off"|"adjustment_up"|"adjustment_down","locale_code": "en"|"km"|"zh","media_type": "image"|"video"|"floor_plan","notification_type": "lead_assigned"|"lead_reassigned"|"lead_unassigned"|"lead_sla_breached"|"viewing_scheduled"|"viewing_upcoming"|"viewing_rescheduled"|"task_assigned"|"task_overdue"|"payout_updated"|"commission_updated"|"lease_expiring","payment_method": "cash"|"bank_transfer"|"aba"|"wing"|"other","payout_eligibility_rule": "on_collected"|"on_earned","payout_status": "pending_approval"|"approved"|"paid"|"rejected"|"cancelled"|"reversed","property_category": "residential"|"commercial","property_type": "apartment"|"condo"|"serviced_apartment"|"villa"|"house"|"flat"|"office"|"retail_shop"|"shophouse"|"warehouse"|"commercial_space","publication_status": "draft"|"submitted"|"in_review"|"changes_requested"|"published"|"unpublished"|"archived","staff_role": "super_admin"|"manager"|"agent"|"marketing"|"finance","submission_status": "new"|"contacted"|"accepted"|"declined"|"spam","submitter_relationship": "owner"|"authorized_representative"|"developer"|"other_agent"|"other","task_priority": "low"|"normal"|"high"|"urgent","task_status": "todo"|"in_progress"|"done"|"cancelled","verification_status": "unverified"|"pending"|"verified"|"rejected","viewing_outcome": "interested"|"not_interested"|"needs_follow_up"|"wants_another_viewing","viewing_status": "scheduled"|"confirmed"|"completed"|"cancelled"|"no_show"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -1112,7 +1323,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "activity_type": ["note", "call", "message", "email", "meeting", "stage_change", "assignment", "viewing"],"agent_share_method": ["none", "percent_of_commission", "fixed_amount"],"area_unit": ["sqm", "sqft"],"authorization_status": ["pending", "active", "expired", "revoked"],"availability_status": ["available", "available_from", "reserved", "rented", "off_market"],"commission_calculation": ["percentage_of_rent", "months_of_rent", "fixed_amount"],"commission_earned_rule": ["on_closed_won", "on_collection"],"commission_method": ["fixed_amount", "percent_of_monthly_rent", "percent_of_total_rent", "custom_amount"],"commission_payment_status": ["pending", "partial", "paid", "overdue", "waived"],"currency_code": ["USD", "KHR"],"deal_stage": ["negotiation", "reserved", "lease_signed", "commission_invoiced", "commission_collected", "lost", "agreement_pending", "closed_won", "closed_lost", "cancelled", "lease_expired"],"document_kind": ["agreement", "receipt", "other"],"expense_category": ["advertising", "transportation", "office_rent", "staff_costs", "marketing_materials", "utilities", "other"],"expense_status": ["pending", "approved", "rejected"],"fee_payer": ["landlord", "tenant", "other"],"furnishing_status": ["unfurnished", "partially_furnished", "fully_furnished"],"lead_source": ["website_form", "phone", "walk_in", "referral", "social_media", "partner_agent", "other"],"lead_stage": ["new", "contacted", "qualified", "viewing_scheduled", "viewed", "negotiation", "won", "lost", "reserved", "unresponsive", "on_hold", "cancelled"],"ledger_entry_type": ["payment", "reversal", "write_off", "adjustment_up", "adjustment_down"],"locale_code": ["en", "km", "zh"],"media_type": ["image", "video", "floor_plan"],"payment_method": ["cash", "bank_transfer", "aba", "wing", "other"],"payout_eligibility_rule": ["on_collected", "on_earned"],"payout_status": ["pending_approval", "approved", "paid", "rejected", "cancelled", "reversed"],"property_category": ["residential", "commercial"],"property_type": ["apartment", "condo", "serviced_apartment", "villa", "house", "flat", "office", "retail_shop", "shophouse", "warehouse", "commercial_space"],"publication_status": ["draft", "submitted", "in_review", "changes_requested", "published", "unpublished", "archived"],"staff_role": ["super_admin", "manager", "agent", "marketing", "finance"],"submission_status": ["new", "contacted", "accepted", "declined", "spam"],"submitter_relationship": ["owner", "authorized_representative", "developer", "other_agent", "other"],"task_priority": ["low", "normal", "high", "urgent"],"task_status": ["todo", "in_progress", "done", "cancelled"],"verification_status": ["unverified", "pending", "verified", "rejected"],"viewing_outcome": ["interested", "not_interested", "needs_follow_up", "wants_another_viewing"],"viewing_status": ["scheduled", "confirmed", "completed", "cancelled", "no_show"]
+            "activity_type": ["note", "call", "message", "email", "meeting", "stage_change", "assignment", "viewing"],"agent_share_method": ["none", "percent_of_commission", "fixed_amount"],"area_unit": ["sqm", "sqft"],"authorization_status": ["pending", "active", "expired", "revoked"],"availability_status": ["available", "available_from", "reserved", "rented", "off_market"],"commission_calculation": ["percentage_of_rent", "months_of_rent", "fixed_amount"],"commission_earned_rule": ["on_closed_won", "on_collection"],"commission_method": ["fixed_amount", "percent_of_monthly_rent", "percent_of_total_rent", "custom_amount"],"commission_payment_status": ["pending", "partial", "paid", "overdue", "waived"],"currency_code": ["USD", "KHR"],"deal_stage": ["negotiation", "reserved", "lease_signed", "commission_invoiced", "commission_collected", "lost", "agreement_pending", "closed_won", "closed_lost", "cancelled", "lease_expired"],"document_kind": ["agreement", "receipt", "other"],"document_type": ["listing_sheet", "inquiry_summary", "viewing_confirmation", "deal_summary", "commission_statement", "payout_statement", "landlord_submission", "agreement_draft"],"expense_category": ["advertising", "transportation", "office_rent", "staff_costs", "marketing_materials", "utilities", "other"],"expense_status": ["pending", "approved", "rejected"],"fee_payer": ["landlord", "tenant", "other"],"furnishing_status": ["unfurnished", "partially_furnished", "fully_furnished"],"lead_source": ["website_form", "phone", "walk_in", "referral", "social_media", "partner_agent", "other"],"lead_stage": ["new", "contacted", "qualified", "viewing_scheduled", "viewed", "negotiation", "won", "lost", "reserved", "unresponsive", "on_hold", "cancelled"],"ledger_entry_type": ["payment", "reversal", "write_off", "adjustment_up", "adjustment_down"],"locale_code": ["en", "km", "zh"],"media_type": ["image", "video", "floor_plan"],"notification_type": ["lead_assigned", "lead_reassigned", "lead_unassigned", "lead_sla_breached", "viewing_scheduled", "viewing_upcoming", "viewing_rescheduled", "task_assigned", "task_overdue", "payout_updated", "commission_updated", "lease_expiring"],"payment_method": ["cash", "bank_transfer", "aba", "wing", "other"],"payout_eligibility_rule": ["on_collected", "on_earned"],"payout_status": ["pending_approval", "approved", "paid", "rejected", "cancelled", "reversed"],"property_category": ["residential", "commercial"],"property_type": ["apartment", "condo", "serviced_apartment", "villa", "house", "flat", "office", "retail_shop", "shophouse", "warehouse", "commercial_space"],"publication_status": ["draft", "submitted", "in_review", "changes_requested", "published", "unpublished", "archived"],"staff_role": ["super_admin", "manager", "agent", "marketing", "finance"],"submission_status": ["new", "contacted", "accepted", "declined", "spam"],"submitter_relationship": ["owner", "authorized_representative", "developer", "other_agent", "other"],"task_priority": ["low", "normal", "high", "urgent"],"task_status": ["todo", "in_progress", "done", "cancelled"],"verification_status": ["unverified", "pending", "verified", "rejected"],"viewing_outcome": ["interested", "not_interested", "needs_follow_up", "wants_another_viewing"],"viewing_status": ["scheduled", "confirmed", "completed", "cancelled", "no_show"]
           }
         }
 } as const

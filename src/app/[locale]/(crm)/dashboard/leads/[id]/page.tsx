@@ -11,6 +11,8 @@ import {
 } from "@/components/crm/lead-forms";
 import { EmptyNote, Panel } from "@/components/crm/panels";
 import { StageBadge } from "@/components/crm/stage-badge";
+import { DocumentLinks } from "@/components/ops/document-links";
+import { Badge } from "@/components/ui/badge";
 import { ListingsEmptyState } from "@/components/property/listings-empty-state";
 import type { Locale } from "@/i18n/config";
 import { interpolate, type Dictionary } from "@/i18n/dictionaries";
@@ -77,7 +79,13 @@ async function LeadContent({
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <h1 className="text-2xl font-bold tracking-tight">{lead.customer_name}</h1>
           <StageBadge stage={lead.stage} dict={dict} />
+          {lead.sla_breached_at ? (
+            <Badge tone="danger" title={dict.ops.tasks.slaBreachedHint}>
+              {dict.ops.tasks.slaBreached}
+            </Badge>
+          ) : null}
         </div>
+        <DocumentLinks role={access.role} locale={locale} dict={dict} entityId={lead.id} types={["inquiry_summary"]} />
         <p className="mt-1 text-sm text-muted">
           {interpolate(t.received, { date: formatDateTime(lead.created_at, locale) })}
           {" · "}

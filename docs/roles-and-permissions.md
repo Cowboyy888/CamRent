@@ -33,6 +33,9 @@ business records.
 | Commissions | CRU | CRU, **except** recording payments | R own deals | none | CRU incl. payments | none |
 | Storage `property-media` | all | all | read published + own; write own property folder | write (non-archived) | read | read published only |
 | Storage `private-docs` | CR | CR | none | none | none | none |
+| Notifications, preferences | R/mark read own | R/mark read own | R/mark read own | own | own | none |
+| Automation rules, runs, events | R, U rules, run, retry | R, U rules, run, retry | none | none | none | none |
+| Generated documents (`generated/<id>/…`) | CR per type | CR per type | CR own types, rows visible to them | listing sheets | statements and deal documents | none |
 
 ## CRM screens (Step 4)
 

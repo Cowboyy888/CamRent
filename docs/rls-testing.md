@@ -21,7 +21,7 @@ To point at another local database use
 refuses any host other than localhost/127.0.0.1, because the tests insert
 (and roll back) data.
 
-What is covered (87 tests across `access.test.ts`, `crm.test.ts`, `finance.test.ts` and `public-queries.test.ts`):
+What is covered (109 tests across `access.test.ts`, `crm.test.ts`, `finance.test.ts`, `automation.test.ts` and `public-queries.test.ts`):
 
 - RLS is enabled on every table in `public`.
 - Anonymous visitors: no access to any base table; cannot insert leads or call
@@ -51,6 +51,15 @@ What is covered (87 tests across `access.test.ts`, `crm.test.ts`, `finance.test.
   permissions, four-eyes, paid details); expenses (approval, separation of
   duties, edits after decision); audit trail; report totals reconciled against
   the ledger per currency; a real two-connection concurrency test.
+- Automation and notifications (`automation.test.ts`): notifications are
+  recipient-only and can only be marked read; preferences are per user and
+  respected; every rule creates its task/notification once and never again on
+  re-run (idempotency keys); disabled rules do nothing and keep history;
+  settings are validated by the database; only managers can change rules, run
+  automation or retry; a failed item is recorded with a safe error code and
+  retried without duplicates; overlapping runs are recorded as skipped; lease
+  expiry reminders fire once per configured period; generated documents are
+  private per role, numbered by the database, and cannot be deleted.
 - Role behaviour for manager, marketing, finance and super admin; role change
   rules; immediate loss of access on deactivation; append-only history; no
   hard deletes; data-model constraints.

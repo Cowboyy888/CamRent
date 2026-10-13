@@ -1,5 +1,6 @@
 import { crmEn } from "./crm.en";
 import { finEn } from "./fin.en";
+import { opsEn } from "./ops.en";
 
 /**
  * English UI strings. This file defines the dictionary shape: Khmer and
@@ -380,6 +381,7 @@ export const en = {
   },
   crm: crmEn,
   fin: finEn,
+  ops: opsEn,
   notFound: {
     title: "Page not found",
     body: "The page you are looking for does not exist or has moved.",

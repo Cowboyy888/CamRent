@@ -65,6 +65,11 @@ export function LeadTable({
                 </td>
                 <td className="px-4 py-3">
                   <StageBadge stage={row.stage} dict={dict} />
+                  {row.slaBreachedAt && isActiveStage(row.stage) ? (
+                    <Badge tone="danger" className="mt-1 block w-fit" title={dict.ops.tasks.slaBreachedHint}>
+                      {dict.ops.tasks.slaBreached}
+                    </Badge>
+                  ) : null}
                 </td>
                 <td className="px-4 py-3 text-ink-soft">
                   {row.nextFollowUpAt ? (

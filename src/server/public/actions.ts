@@ -1,10 +1,12 @@
 "use server";
 
+import { createHash } from "node:crypto";
+import { headers } from "next/headers";
 import { z } from "zod";
 import { readSupabasePublicEnv } from "@/config/supabase-env";
 import { createSupabasePublicClient } from "@/lib/supabase/public";
 import { createSupabaseAdminClient } from "@/server/db/admin-client";
-import { MAX_REQUESTS_PER_HOUR, type PublicFormState } from "./constants";
+import { MAX_REQUESTS_PER_HOUR, MAX_REQUESTS_PER_HOUR_PER_CLIENT, type PublicFormState } from "./constants";
 import { enquirySchema, landlordSubmissionSchema } from "./schemas";
 
 /**
@@ -27,6 +29,35 @@ function formValues(formData: FormData): Record<string, FormDataEntryValue> {
 function isBot(formData: FormData): boolean {
   const trap = formData.get("website");
   return typeof trap === "string" && trap.trim() !== "";
+}
+
+/**
+ * Counts and records this client's attempts (hashed address; nothing readable
+ * is stored). Behind a proxy the first X-Forwarded-For entry is the client;
+ * when no address is available (local development) the check is skipped.
+ */
+async function tooManyFromClient(kind: "enquiry" | "landlord"): Promise<boolean> {
+  const h = await headers();
+  const address = (h.get("x-forwarded-for") ?? "").split(",")[0]?.trim() || h.get("x-real-ip")?.trim();
+  if (!address) return false;
+  const clientHash = createHash("sha256")
+    .update(`${process.env.RATE_LIMIT_SALT ?? "camrent"}:${address}`)
+    .digest("hex");
+
+  const admin = createSupabaseAdminClient();
+  const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  await admin.from("form_attempts").delete().lt("created_at", dayAgo);
+  const { count, error } = await admin
+    .from("form_attempts")
+    .select("id", { count: "exact", head: true })
+    .eq("client_hash", clientHash)
+    .eq("kind", kind)
+    .gte("created_at", hourAgo);
+  if (error) throw error;
+  if ((count ?? 0) >= MAX_REQUESTS_PER_HOUR_PER_CLIENT) return true;
+  await admin.from("form_attempts").insert({ client_hash: clientHash, kind });
+  return false;
 }
 
 async function tooManyRecent(
@@ -88,7 +119,9 @@ export async function submitEnquiryAction(
         .maybeSingle();
       if (!row) return { status: "error", error: "propertyUnavailable" };
     }
-    if (await tooManyRecent("leads", data)) return { status: "error", error: "rateLimited" };
+    if (await tooManyRecent("leads", data) || (await tooManyFromClient("enquiry"))) {
+      return { status: "error", error: "rateLimited" };
+    }
 
     const { error } = await createSupabaseAdminClient().from("leads").insert({
       customer_name: data.name,
@@ -136,7 +169,7 @@ export async function submitLandlordListingAction(
   if (!canWrite()) return { status: "error", error: "notConfigured" };
 
   try {
-    if (await tooManyRecent("landlord_submissions", data)) {
+    if ((await tooManyRecent("landlord_submissions", data)) || (await tooManyFromClient("landlord"))) {
       return { status: "error", error: "rateLimited" };
     }
     const { error } = await createSupabaseAdminClient().from("landlord_submissions").insert({

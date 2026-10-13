@@ -73,7 +73,9 @@ See [`.env.example`](.env.example). Only names are committed; real values go in
 | `NEXT_PUBLIC_SITE_URL` | Canonical and hreflang URLs, robots.txt | `http://localhost:3000` |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | none (sign-in disabled) |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon / publishable key (browser-safe) | none |
-| `SUPABASE_SERVICE_ROLE_KEY` | **Server only.** Bypasses RLS; used to invite staff and to store public form submissions | none (forms report "not available") |
+| `SUPABASE_SERVICE_ROLE_KEY` | **Server only.** Bypasses RLS; used to invite staff, to store public form submissions and by the cron route | none (forms report "not available") |
+| `RATE_LIMIT_SALT` | **Server only.** Salt for the hashed client addresses used by the public form throttle | built-in constant (set your own in production) |
+| `CRON_SECRET` | **Server only.** Bearer secret for `GET /api/cron/automation` (16+ characters). Empty disables the route; the database's own pg_cron job does not need it | none |
 
 Variables are validated by `src/config/env.ts` and `src/config/supabase-env.ts`,
 which fail with a clear message if a value is invalid.
@@ -103,7 +105,21 @@ which fail with a clear message if a value is invalid.
 | `/{locale}/dashboard/payouts` | Agent payouts: request, approve, record as paid |
 | `/{locale}/dashboard/expenses` | Expenses with receipts and approval |
 | `/{locale}/dashboard/finance` | Financial report by date range, definitions, CSV export, agency finance rules, audit log |
+| `/{locale}/dashboard/tasks` | Tasks (mine, or everyone's for managers), status updates, automatic tasks marked |
+| `/{locale}/dashboard/notifications` | In-app notification inbox, mark read, per-type preferences |
+| `/{locale}/dashboard/documents` | Document center: numbered, private PDFs in English, Khmer or Chinese (see `docs/documents.md`) |
+| `/{locale}/dashboard/settings/automation` | Managers: enable/disable rules, intervals, run now, history, failed work and retry (see `docs/automation.md`) |
+| `/api/health` | Liveness and database reachability (no data) |
+| `/sitemap.xml`, `/robots.txt` | Public sitemap with language alternates; CRM and API excluded |
+| `/api/cron/automation` | Scheduler endpoint (Bearer `CRON_SECRET`); an alternative to pg_cron |
 | `/admin` | Permanent redirect to the dashboard (Step 1-3 URL) |
+
+## Going live
+
+See [`PRODUCTION_LAUNCH_CHECKLIST.md`](PRODUCTION_LAUNCH_CHECKLIST.md),
+[`docs/deployment.md`](docs/deployment.md),
+[`docs/backup-and-recovery.md`](docs/backup-and-recovery.md) and
+[`docs/security-audit.md`](docs/security-audit.md).
 
 ## Project structure
 
@@ -184,8 +200,8 @@ stay `null`, and are hidden, until real details are confirmed.
 
 ## Not built yet (by design)
 
-Property management screens, CRM workflows, commission tracking, the staff
-management UI, analytics and payments are later phases. The tables for most of
+Property management screens, the staff management UI, email/Telegram
+notifications, analytics and payments are later phases. The tables for most of
 them already exist (Step 2) but no screen uses them yet. See blueprint section 15
 and the backlog in section 18.
 

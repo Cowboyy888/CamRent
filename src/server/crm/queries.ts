@@ -31,6 +31,7 @@ export interface LeadListItem {
   preferredArea: string | null;
   nextFollowUpAt: string | null;
   createdAt: string;
+  slaBreachedAt: string | null;
 }
 
 function toLeadItem(row: LeadListRow): LeadListItem | null {
@@ -49,6 +50,7 @@ function toLeadItem(row: LeadListRow): LeadListItem | null {
     preferredArea: row.preferred_area,
     nextFollowUpAt: row.next_follow_up_at,
     createdAt: row.created_at,
+    slaBreachedAt: row.sla_breached_at,
   };
 }
 

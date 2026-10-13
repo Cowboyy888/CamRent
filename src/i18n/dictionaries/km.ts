@@ -1,5 +1,6 @@
 import { crmKm } from "./crm.km";
 import { finKm } from "./fin.km";
+import { opsKm } from "./ops.km";
 import type { Dictionary } from "./en";
 
 /**
@@ -377,6 +378,7 @@ export const km: Dictionary = {
   },
   crm: crmKm,
   fin: finKm,
+  ops: opsKm,
   notFound: {
     title: "រកមិនឃើញទំព័រ",
     body: "ទំព័រដែលអ្នកកំពុងស្វែងរកមិនមាន ឬត្រូវបានផ្លាស់ទី។",

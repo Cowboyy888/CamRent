@@ -1,5 +1,7 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
+import { NotificationBell } from "@/components/ops/notification-bell";
+import { CrmLanguageSwitch } from "@/components/ops/language-switch";
 import { BrandMark, BrandWordmark } from "@/components/layout/brand-logo";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
@@ -12,7 +14,9 @@ import {
   canViewPayouts,
   canViewReceivables,
 } from "@/lib/finance/permissions";
+import { canManageAutomation } from "@/lib/ops/permissions";
 import type { StaffRole } from "@/lib/staff-roles";
+import { generatableTypes } from "@/server/documents/catalog";
 import { dashboardPath } from "@/server/auth/constants";
 import { signOutAction } from "@/server/auth/actions";
 import { CrmNav, type CrmNavItem } from "./crm-nav";
@@ -59,7 +63,32 @@ export function CrmShell({
       items.push({ href: dashboardPath(locale, sub), match: dashboardPath(locale, sub), label, icon });
     }
   }
-  const planned = [t.nav.viewings, t.nav.properties, t.nav.landlords, t.nav.tasks];
+  items.push(
+    { href: dashboardPath(locale, "/tasks"), match: dashboardPath(locale, "/tasks"), label: dict.ops.nav.tasks, icon: "tasks" },
+    {
+      href: dashboardPath(locale, "/notifications"),
+      match: dashboardPath(locale, "/notifications"),
+      label: dict.ops.nav.notifications,
+      icon: "bell",
+    },
+  );
+  if (generatableTypes(user.role).length > 0) {
+    items.push({
+      href: dashboardPath(locale, "/documents"),
+      match: dashboardPath(locale, "/documents"),
+      label: dict.ops.nav.documents,
+      icon: "file",
+    });
+  }
+  if (canManageAutomation(user.role)) {
+    items.push({
+      href: dashboardPath(locale, "/settings/automation"),
+      match: dashboardPath(locale, "/settings"),
+      label: dict.ops.nav.automation,
+      icon: "cog",
+    });
+  }
+  const planned = [t.nav.viewings, t.nav.properties, t.nav.landlords];
 
   return (
     <div className="flex min-h-dvh flex-col bg-sand-100 lg:flex-row">
@@ -82,7 +111,11 @@ export function CrmShell({
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex min-h-14 flex-wrap items-center gap-3 border-b border-sand-200 bg-white px-5 py-2">
           <p className="text-sm font-semibold text-ink-soft">{t.nav.workspace}</p>
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex flex-wrap items-center gap-3">
+            <CrmLanguageSwitch current={locale} label={dict.ops.nav.language} />
+            <Suspense fallback={null}>
+              <NotificationBell locale={locale} dict={dict} />
+            </Suspense>
             <p className="text-right text-sm leading-tight">
               <span className="block font-semibold text-ink">{user.fullName}</span>
               <span className="block text-xs text-muted">{t.roles[user.role]}</span>

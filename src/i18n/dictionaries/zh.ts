@@ -1,5 +1,6 @@
 import { crmZh } from "./crm.zh";
 import { finZh } from "./fin.zh";
+import { opsZh } from "./ops.zh";
 import type { Dictionary } from "./en";
 
 /**
@@ -366,6 +367,7 @@ export const zh: Dictionary = {
   },
   crm: crmZh,
   fin: finZh,
+  ops: opsZh,
   notFound: {
     title: "页面未找到",
     body: "您要查找的页面不存在或已移动。",

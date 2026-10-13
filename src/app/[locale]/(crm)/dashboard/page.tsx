@@ -22,6 +22,7 @@ import {
   getUpcomingViewings,
   type Result,
 } from "@/server/crm/queries";
+import { countOverdueTasks } from "@/server/ops/queries";
 import type { Money } from "@/types/property";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -86,8 +87,23 @@ async function DashboardContent({ locale, dict }: { locale: Locale; dict: Dictio
   const s = unwrap(summary);
   const leadsHref = dashboardPath(locale, "/leads");
 
+  const overdueTasks = await countOverdueTasks(client, access.userId, now);
+
   return (
     <div className="space-y-8">
+      {overdueTasks > 0 ? (
+        <p
+          role="status"
+          className="flex flex-wrap items-center gap-3 rounded-control bg-warning-50 p-3 text-sm font-semibold text-warning"
+        >
+          {overdueTasks === 1
+            ? dict.ops.tasks.overdueBannerOne
+            : interpolate(dict.ops.tasks.overdueBanner, { count: String(overdueTasks) })}
+          <Link href={dashboardPath(locale, "/tasks")} className="underline">
+            {dict.ops.tasks.viewTasks}
+          </Link>
+        </p>
+      ) : null}
       {s === null ? (
         <SectionError dict={dict} />
       ) : (

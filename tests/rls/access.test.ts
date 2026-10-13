@@ -34,6 +34,14 @@ const baseTables = [
   "expenses",
   "deal_documents",
   "financial_audit_log",
+  "automation_rules",
+  "automation_runs",
+  "automation_events",
+  "notifications",
+  "notification_preferences",
+  "document_counters",
+  "form_attempts",
+  "generated_documents",
 ];
 
 suite("RLS: structure", () => {
@@ -152,7 +160,8 @@ suite("RLS: signed-in users without staff access", () => {
       await withFixtures(async (db) => {
         await db.as(who);
         for (const table of baseTables) {
-          if (table === "profiles") continue;
+          // profiles lists the caller's own row; counters are internal (no grants at all).
+          if (table === "profiles" || table === "document_counters" || table === "form_attempts") continue;
           const rows = await db.rows(`select 1 from public.${table}`);
           expect(rows, `${who} reading ${table}`).toHaveLength(0);
         }

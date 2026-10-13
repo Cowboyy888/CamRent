@@ -1,3 +1,4 @@
+import { DocumentLinks } from "@/components/ops/document-links";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -122,6 +123,13 @@ async function Content({ params, locale, dict }: { params: Props["params"]; loca
           </h1>
           <DealStageBadge stage={deal.stage} dict={dict} />
         </div>
+        <DocumentLinks
+          role={access.role}
+          locale={locale}
+          dict={dict}
+          entityId={deal.id}
+          types={["deal_summary", "payout_statement", "agreement_draft"]}
+        />
         <p className="mt-1 text-sm text-muted">
           {result.detail.agentName ?? ""}
           {result.detail.landlordName ? ` · ${dict.fin.common.landlord}: ${result.detail.landlordName}` : ""}
